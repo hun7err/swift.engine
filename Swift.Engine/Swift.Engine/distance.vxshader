@@ -1,0 +1,25 @@
+#version 330 core
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
+//layout(location = 1) in vec3 vertexColor;
+out vec3 fragmentColor;
+float dist, camDist;
+vec4 vertexPosition_worldspace;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Perspective;
+
+uniform vec3 cameraPos;
+
+void main(){
+	// Output position of the vertex, in clip space : MVP * position
+	vertexPosition_worldspace = Model * vec4(vertexPosition_modelspace, 1);
+	gl_Position =  Perspective * View * vertexPosition_worldspace;
+	camDist = sqrt(pow(cameraPos.x, 2) + pow(cameraPos.y, 2) + pow(cameraPos.z, 2));
+	dist = sqrt(pow(vertexPosition_worldspace.x - cameraPos.x,2) + pow(vertexPosition_worldspace.y - cameraPos.y,2) + pow(vertexPosition_worldspace.z - cameraPos.z,2)); // vertex distance
+	fragmentColor = vec3(1.4 - dist / camDist, 1.4 - dist / camDist, 1.4 - dist / camDist); // vertexColor
+}
+
