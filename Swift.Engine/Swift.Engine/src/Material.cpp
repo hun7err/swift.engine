@@ -1,5 +1,5 @@
-#include "Material.h"
-#include "MaterialManager.h"
+#include "../include/Material.h"
+#include "../include/MaterialManager.h"
 
 namespace Swift {
 	Material::Material() {}

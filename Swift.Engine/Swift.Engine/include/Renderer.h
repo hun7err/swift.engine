@@ -10,11 +10,13 @@ namespace Swift {
 	class Renderer {
 		private:
 			Camera* cam;
+			int renderMode;
 			//ObjectManager* objManager;
 		public:
 			void render();
 			void setCamera(Camera* c);
 			void setRenderMode(unsigned int mode);
+			int getRenderMode();
 			void clearColor(double r, double g, double b, double a);
 		Renderer();
 		//Renderer(ObjectManager* obj);

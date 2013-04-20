@@ -1,4 +1,4 @@
-#include "MaterialManager.h"
+#include "../include/MaterialManager.h"
 #include <fstream>
 #include <vector>
 #include <GL/glew.h>

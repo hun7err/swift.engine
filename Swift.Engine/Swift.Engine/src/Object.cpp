@@ -1,4 +1,4 @@
-#include "Object.h"
+#include "../include/Object.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
@@ -23,18 +23,22 @@ namespace Swift {
 		mtl = _mtl;
 	}
 
-	void Object::rotate(glm::vec3 axis, float angle) {
+	void Object::rotate(const glm::vec3& axis, float angle) {
 		Model = glm::rotate(Model, angle, axis);
 	}
 
-	void Object::move(const glm::vec3& offset) {
-		Model = glm::translate(Model, offset);
-		// ustaliæ jak zrobiæ translacjê, ¿eby przesuwa³a na okreœlony punkt newPos
+	void Object::move(const glm::vec3& newPos) {
+		glm::vec3 curPos = getPosition();
+		Model = glm::translate(Model, glm::vec3(newPos.x - curPos.x, newPos.y - curPos.y, newPos.z - curPos.z));
 	}
 
 	glm::vec3 Object::getPosition() {
-		glm::vec4 pos = Model * glm::vec4(0,0,0,1);
+		glm::vec4 pos = Model * glm::vec4(origin,1);
 		return glm::vec3(pos.x, pos.y, pos.z);
+	}
+
+	glm::vec3 Object::getOrigin() {
+		return origin;
 	}
 
 	void Object::setName(std::string _name) {

@@ -1,4 +1,4 @@
-#include "Renderer.h"
+#include "../include/Renderer.h"
 //#include <glm/gtc/type_ptr.hpp>
 
 /*
@@ -86,6 +86,11 @@ namespace Swift {
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			break;
 		}
+		renderMode = mode;
+	}
+
+	int Renderer::getRenderMode() {
+		return renderMode;
 	}
 
 	void Renderer::setCamera(Camera* c) {

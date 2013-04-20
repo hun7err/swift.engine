@@ -11,6 +11,7 @@ namespace Swift {
 	class Object {
 		protected:
 			glm::mat4 Model;
+			glm::vec3 origin;
 			GLuint VBO;
 			GLuint VAO;
 			std::vector<GLfloat> vertices;
@@ -23,10 +24,11 @@ namespace Swift {
 			Material* getMaterial();
 			glm::mat4 getModelMatrix();
 			glm::vec3 getPosition();
+			glm::vec3 getOrigin();
 			unsigned int getVertexCount();
-			void rotate(glm::vec3 axis, float angle);
+			void rotate(const glm::vec3& axis, float angle);
 			// jeszcze pitch, yaw, roll!
-			void move(const glm::vec3& offset);
+			void move(const glm::vec3& newPos);
 			// scale jeszcze!
 			GLuint getVBO();
 			GLuint getVAO();

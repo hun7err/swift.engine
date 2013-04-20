@@ -1,4 +1,4 @@
-#include "Supervisor.h"
+#include "../include/Supervisor.h"
 #include <GL/glew.h>
 #include <cstdio>
 

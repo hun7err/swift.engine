@@ -1,4 +1,4 @@
-#include "Group.h"
+#include "../include/Group.h"
 
 namespace Swift {
 	void Group::add(Object* obj) {

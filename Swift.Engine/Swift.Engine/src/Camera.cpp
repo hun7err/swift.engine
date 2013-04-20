@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "../include/Camera.h"
 #include <glm/ext.hpp>
 
 namespace Swift {
@@ -24,6 +24,12 @@ namespace Swift {
 	}
 	void Camera::setFarClip(const float &_farClip) {
 		farClipping = _farClip;
+	}
+	void Camera::move(const glm::vec3& _pos, const glm::vec3& offset, const glm::vec3& _up, float _fov) {
+		fov = _fov;
+		up = _up;
+		pos = _pos;
+		View = glm::lookAt(pos, pos+offset, up);
 	}
 	void Camera::setViewParams(glm::vec3 _pos, glm::vec3 _target, glm::vec3 _up){
 		pos = _pos;

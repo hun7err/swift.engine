@@ -1,10 +1,11 @@
-#include "Sphere.h"
+#include "../include/Sphere.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 
 namespace Swift {
 	Sphere::Sphere(double radius, int segments, int rings, glm::vec3 center) {
 		Model = glm::mat4(1.0f);
+		origin = center;
 
 		double  r_f = M_PI/(rings+1),
 				s_f = 2*M_PI/segments;

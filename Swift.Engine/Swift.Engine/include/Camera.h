@@ -49,6 +49,7 @@ namespace Swift {
 			glm::vec3 getPosition();
 			glm::vec3 getTarget();
 			glm::vec3 getUpVector();
+			void move(const glm::vec3& _pos, const glm::vec3& offset, const glm::vec3& _up, float _fov = 45.0f);
 		Camera();	/** Basic constructor - sets View and Perspective to identity matrices; use ONLY when you intend to change the paramters later and refresh matrices manually by using Camera::refresh() */
 		Camera(glm::vec3 _pos,
 			glm::vec3 _target,
