@@ -8,6 +8,8 @@ namespace Swift {
 		heightSegs = heightSegments;
 		widthSegs = widthSegments;
 
+		//move(pos);
+
 		calculateVertices();
 	}
 
@@ -17,12 +19,13 @@ namespace Swift {
 
 	void Plane::calculateVertices() {
 		//std::vector<GLfloat> vertex_data;
-		const double	xoff = width / widthSegs,
-						zoff = height / heightSegs;
+		const double	xoff = width / (double)widthSegs,
+						zoff = height / (double)heightSegs;
 		double	xstart = origin.x - width/2,
 				zstart = origin.z - height/2;
 
-		if(!vertices.empty()) vertices.clear();
+		vertices.clear();
+
 		for (int i = 0; i < widthSegs; i++) {
 			for(int j = 0; j < heightSegs; j++) {
 				glm::vec3	p0(xstart + i*xoff, origin.y, zstart + j*zoff),

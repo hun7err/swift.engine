@@ -19,12 +19,16 @@ namespace Swift {
 			Material* mtl;
 			void destroy();
 			void setup();
+			bool visible;
 		public:
 			GLfloat* getVertices();
 			Material* getMaterial();
 			glm::mat4 getModelMatrix();
 			glm::vec3 getPosition();
 			glm::vec3 getOrigin();
+			bool isVisible();
+			void hide();
+			void show();
 			unsigned int getVertexCount();
 			void rotate(const glm::vec3& axis, float angle);
 			// jeszcze pitch, yaw, roll!

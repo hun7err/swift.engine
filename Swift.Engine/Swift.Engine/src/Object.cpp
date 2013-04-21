@@ -53,24 +53,39 @@ namespace Swift {
 		return VAO;
 	}
 
+	void Object::hide() {
+		visible = false;
+	}
+
+	void Object::show() {
+		visible = true;
+	}
+
+	bool Object::isVisible() {
+		return visible;
+	}
+
 	GLuint Object::getVBO() {
 		return VBO;
 	}
 
 	void Object::setup() {
-		Model = glm::mat4(1.0f);
+		Model = glm::translate(glm::mat4(1.0f), origin);
+		visible = true;
 
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
 
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_DYNAMIC_DRAW);
 	}
 
 	void Object::destroy() {
 		glDeleteBuffers(1, &VBO);
 		glDeleteVertexArrays(1, &VAO);
+
+		vertices.clear();
 	}
 
 	Object::Object() {

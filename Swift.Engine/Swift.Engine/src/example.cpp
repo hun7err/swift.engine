@@ -1,6 +1,7 @@
 #include "../include/Supervisor.h"
 #include "../include/Sphere.h"
 #include "../include/Plane.h"
+#include "../include/Cube.h"
 #include <iostream>
 #include <GL/glfw.h>
 using namespace std;
@@ -57,28 +58,46 @@ int main() {
 	renderer->clearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	renderer->setCamera(cam);
 
-	Sphere	*s1 = new Sphere(3, 55, 29, glm::vec3(0,0,0)),
-			*s2 = new Sphere(1, 25, 19, glm::vec3(5,0,0));
+	Sphere	*s1 = new Sphere(3, 55, 29, glm::vec3(0,0,0));//,
+		//	*s2 = new Sphere(1, 25, 19, glm::vec3(5,0,0));
 
-	Plane *p = new Plane(10.0f, 10.0f, glm::vec3(0,-5,0));
+	Plane *p0 = new Plane(1000.0f, 1000.0f, glm::vec3(0,-10,0)),
+			*p1 = new Plane(10.0f, 10.0f, glm::vec3(-5,0,0), 3, 3);
+
+	Cube *c = new Cube(6.0f, glm::vec3(5,0,0));
+	
 	//MaterialManager->loadShader("default", "default.vxshader", "default.pxshader");
 	MaterialManager->loadShader("distance", "distance.vxshader", "distance.pxshader");
 	Material* def = new Material("distance");
 
 	s1->setMaterial(def);
 	s1->setName("Sfera 1");
-	s2->setMaterial(def);
-	s2->setName("Sfera 2");
-	p->setMaterial(def);
+	//s2->setMaterial(def);
+	//s2->setName("Sfera 2");
+	p0->setMaterial(def);
+	p1->setMaterial(def);
+	c->setMaterial(def);
 
 	Group* g = new Group(s1);
 	g->setName("Okon"); // Podajê has³o: okoñ.
-	g->add(s2);
-	g->add(p);
+	//g->add(s2);
+	//g->add(p0);
+	g->add(p1);
+	g->add(c);
 
 	/*
 	  to-do:
 	  -------
+		-!!!! ³adowanie modelu z pliku
+		-!!!! sto¿ek (cone)
+		-!!!! prostopad³oœcian (box)
+		-!!!! szeœcian (cube)
+		-!!!! predefiniowane: czajnik, ma³pa
+		-!!!! 'p¹czek' (torus)
+		-!!! sfera o równym roz³o¿eniu wierzcho³ków (ikosfera)
+		-!!!!! model oœwietlenia phonga
+			- œwiat³a -> punktowe i "obiektowe"
+
 		-! przeliczaæ œrodek grupy po dodaniu ka¿dego obiektu
 		  (wspó³rzêdne w przestrzeni œwiata! a œrodek w przestrzeni "grupy" tj. grupie modeli)
 		-!! dodaæ transformacje grup (translacja, obrót itp.)
@@ -109,6 +128,7 @@ int main() {
 	
 	renderer->setRenderMode(SW_WIREFRAME);
 	double lastTime = glfwGetTime();
+
 	do {
 		double currentTime = glfwGetTime();
 		float deltaTime = float(currentTime - lastTime);
@@ -142,28 +162,38 @@ int main() {
 			position -= right * deltaTime * speed;
 		if(glfwGetKey(GLFW_KEY_SPACE) == GLFW_PRESS)
 			renderer->setRenderMode(SW_SOLID);
+		if(glfwGetKey(GLFW_KEY_KP_ADD) == GLFW_PRESS) {
+			int hs = p1->getHeightSegCount(),
+				ws = p1->getWidthSegCount();
+			p1->setHeightSegCount(++hs);
+			p1->setWidthSegCount(++ws);
+		}
+		if(glfwGetKey(GLFW_KEY_F3) == GLFW_PRESS) {
+			int s = c->getSegCount();
+			c->setSegCount(++s);
+		}
+		if(glfwGetKey(GLFW_KEY_F1) == GLFW_PRESS) {
+			int s = s1->getSegmentCount(),
+				r = s1->getRingCount();
+			s1->setSegmentCount(++s);
+			s1->setRingCount(++r);
+		}
+		if(glfwGetKey(GLFW_KEY_F2) == GLFW_PRESS) {
+			int s = s1->getSegmentCount(),
+				r = s1->getRingCount();
+			s1->setSegmentCount(--s);
+			s1->setRingCount(--r);
+		}
 
 		cam->move(position, direction, up);
 		// obrót pierwszej kuli
-		s1->rotate(glm::vec3(0,1,0), angle);
-		
-		// obrót wokó³ pierwszej kuli
-		
-		/*glm::vec3 pos = s2->getPosition();
-		s2->rotate(glm::vec3(0,1,0), angle);
-		s2->move(pos);
-		s2->rotate(glm::vec3(0,1,0),-2*angle);
-		s2->move(glm::vec3(0,0,0));*/
+		//glm::vec3 pos = s1->getPosition();
+		//s1->move(pos);
+		//s1->rotate(glm::vec3(1,0,0), angle);
+		//s1->move(-pos);
+		//p1->rotate(glm::vec3(0,1,0), 0.5*angle);
 
-		s2->rotate(glm::vec3(0,1,0), 2*angle);
-
-		//glm::vec3 pos = s2->getPosition();
-		//printf("pos = (%f %f %f)\n", pos.x, pos.y, pos.z);
-		// obrót wokó³ w³asnej osi
-		
-		//s2->move(pos);
-		//s2->rotate(glm::vec3(0,1,0), -angle);
-		//s2->move(-pos);
+		// s2->rotate(glm::vec3(0,1,0), 2*angle);
 
 		renderer->render();
 		glfwSwapBuffers();

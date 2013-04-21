@@ -3,10 +3,17 @@
 #include <math.h>
 
 namespace Swift {
-	Sphere::Sphere(double radius, int segments, int rings, glm::vec3 center) {
-		Model = glm::mat4(1.0f);
+	Sphere::Sphere(double _radius, int _segments, int _rings, glm::vec3 center) {
+		//Model = glm::mat4(1.0f);
 		origin = center;
+		segments = _segments;
+		rings = _rings;
+		radius = _radius;
+		
+		calculateVertices();
+	}
 
+	void Sphere::calculateVertices() {
 		double  r_f = M_PI/(rings+1),
 				s_f = 2*M_PI/segments;
 
@@ -18,23 +25,24 @@ namespace Swift {
 		const int vertex_count = 2 + rings*segments;
 		glm::vec3 *gl_vertices = new glm::vec3[vertex_count];
 
+		vertices.clear();
 		//printf("vertex count:\t%d\n", vertex_count);
 		//vcount = vertex_count;
 
 		int cur_pos = 0;
-		gl_vertices[cur_pos] = glm::vec3(0.0f + center.x, (-1)*radius + center.z, 0.0f + center.y);
+		gl_vertices[cur_pos] = glm::vec3(0.0f + origin.x, (-1)*radius + origin.y, 0.0f + origin.z);
 		cur_pos++;
 		for(int r = 1/*1*/; r < rings+1; r++) {
 			for(int s = 0; s < segments; s++) {
-				GLfloat x = radius * cos(s_f * s) * cos(-M_PI_2 + r_f * r) + center.x;
-				GLfloat y = radius * sin(s_f * s) * cos(-M_PI_2 + r_f * r) + center.y;
-				GLfloat z = radius * sin(-M_PI_2 + r_f * r) + center.z;
+				GLfloat x = radius * cos(s_f * s) * cos(-M_PI_2 + r_f * r) + origin.x;
+				GLfloat y = radius * sin(-M_PI_2 + r_f * r) + origin.y;
+				GLfloat z = radius * sin(s_f * s) * cos(-M_PI_2 + r_f * r) + origin.z;
 				//GLfloat y = sin( -M_PI_2 + M_PI * r_f * r);
 				//GLfloat x = cos(2*M_PI * s_f * s) * sin(M_PI * r_f * r);
 				//GLfloat z = sin(2*M_PI*s_f*s) * sin(M_PI*r_f*r);
 				//printf("%f %f %f\n", x, z, y);
 
-				gl_vertices[cur_pos] = glm::vec3(x, z, y);
+				gl_vertices[cur_pos] = glm::vec3(x, y, z);
 			
 				cur_pos++;
 				//out << x << ", " << z << ", " << y << std::endl;
@@ -42,7 +50,7 @@ namespace Swift {
 			//out << std::endl;
 		}
 		//out.close();
-		gl_vertices[vertex_count-1] = glm::vec3(0 + center.x, radius + center.z, 0 + center.y);
+		gl_vertices[vertex_count-1] = glm::vec3(0 + origin.x, radius + origin.y, 0 + origin.z);
 
 		/*printf("gl_vertices_BEGIN\n");
 		for(int i = 0; i < vertex_count; i++) {
@@ -116,9 +124,9 @@ namespace Swift {
 			vertices[cur_pos+5] = gl_vertices[diff+i].z;
 			//printf("%d ", diff+i);
 
-			vertices[cur_pos+6] = gl_vertices[i-1 == segments ? vertex_count-1-segments : vertex_count-segments+i].x;
-			vertices[cur_pos+7] = gl_vertices[i-1 == segments ? vertex_count-1-segments : vertex_count-segments+i].y;
-			vertices[cur_pos+8] = gl_vertices[i-1 == segments ? vertex_count-1-segments : vertex_count-segments+i].z;
+			vertices[cur_pos+6] = gl_vertices[i+1 == segments ? vertex_count-segments-1 : vertex_count-segments+i].x;
+			vertices[cur_pos+7] = gl_vertices[i+1 == segments ? vertex_count-segments-1 : vertex_count-segments+i].y;
+			vertices[cur_pos+8] = gl_vertices[i+1 == segments ? vertex_count-segments-1 : vertex_count-segments+i].z;
 			//printf("%d\n", i+1 == segments ? vertex_count-1-segments : vertex_count-segments+i);
 
 			cur_pos += 9;
@@ -127,9 +135,40 @@ namespace Swift {
 		//	printf("%f %f %f\n", vertices[i], vertices[i+1], vertices[i+2]);
 		//printf("Sfera: vertices[n-1] = vertices[%d] = %f\n", vertices.size()-1, vertices[vertices.size()-1]);
 		delete gl_vertices;
+
 		setup();
 	}
+
+	int Sphere::getSegmentCount(){
+		return segments;
+	}
+	
+	int Sphere::getRadius(){
+		return radius;
+	}
+	
+	int Sphere::getRingCount(){
+		return rings;
+	}
+	
+	void Sphere::setSegmentCount(int _segments){
+		segments = _segments;
+		calculateVertices();
+	}
+	
+	void Sphere::setRingCount(int _rings){
+		rings = _rings;
+		calculateVertices();
+	}
+
+	void Sphere::setRadius(int _radius) {
+		radius = _radius;
+		calculateVertices();
+	}
+
 	Sphere::~Sphere() {
 		destroy();
 	}
+
+
 }

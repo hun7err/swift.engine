@@ -18,12 +18,6 @@ namespace Swift {
 			to-read:
 				RPG -> wyk³ad o w³asnym mened¿erze pamiêci
 		*/
-
-		/*
-			to-do:
-				zrobiæ przegl¹danie groups i objects pêtlami i pojedynczo (bez pêtli i iteratorów,
-				np. groups[0]->objects[0]
-		*/
 		std::vector<Group*>::iterator it = ObjectManager->getGroups()->begin(), end = ObjectManager->getGroups()->end();
 		for(; it != end; ++it) {
 			//printf("Group name: %s\n", (*it)->getName().c_str());
@@ -31,6 +25,7 @@ namespace Swift {
 
 			for(; j != end; ++j) {
 				Object* object = *j;
+				if(object->isVisible()) {
 				//printf("Vertices[n-1] = vertices[%d] = %f\n", object->getVertexCount()-1, object->getVertices()[object->getVertexCount()-1]);
 				//printf("Object name: %s\n", object->getName().c_str());
 
@@ -73,11 +68,13 @@ namespace Swift {
 				//	printf("%f %f %f\n", object->getVertices()[i], object->getVertices()[i+1], object->getVertices()[i+2]);
 				glDrawArrays(GL_TRIANGLES, 0, object->getVertexCount());
 				glDisableVertexAttribArray(0);
+				}
 			}
 		}
 	}
 
 	void Renderer::setRenderMode(unsigned int mode) {
+		// to-add: edged polygons (solid+wireframe)
 		switch(mode) {
 			case SW_WIREFRAME:
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
