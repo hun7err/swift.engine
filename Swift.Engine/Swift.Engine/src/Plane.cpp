@@ -33,30 +33,16 @@ namespace Swift {
 							p2(xstart + (i+1)*xoff, origin.y, zstart + (j+1)*zoff),
 							p3(xstart + i*xoff, origin.y, zstart + (j+1)*zoff);
 				// vertices are oriented CW (clockwise)
-				// first triangle
-				vertices.push_back(p0.x);
-				vertices.push_back(p0.y);
-				vertices.push_back(p0.z);
 				
-				vertices.push_back(p1.x);
-				vertices.push_back(p1.y);
-				vertices.push_back(p1.z);
-
-				vertices.push_back(p3.x);
-				vertices.push_back(p3.y);
-				vertices.push_back(p3.z);
+				// first triangle
+				vertices.push_back(p0);
+				vertices.push_back(p1);
+				vertices.push_back(p3);
+				
 				// second triangle
-				vertices.push_back(p1.x);
-				vertices.push_back(p1.y);
-				vertices.push_back(p1.z);
-
-				vertices.push_back(p2.x);
-				vertices.push_back(p2.y);
-				vertices.push_back(p2.z);
-
-				vertices.push_back(p3.x);
-				vertices.push_back(p3.y);
-				vertices.push_back(p3.z);
+				vertices.push_back(p1);
+				vertices.push_back(p2);
+				vertices.push_back(p3);
 			}
 		}
 		setup();

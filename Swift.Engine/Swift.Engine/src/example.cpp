@@ -2,40 +2,26 @@
 #include "../include/Sphere.h"
 #include "../include/Plane.h"
 #include "../include/Cube.h"
+#include "../include/Mesh.h"
+#include "../include/GlfwWindow.h"
 #include <iostream>
-#include <GL/glfw.h>
 using namespace std;
 using namespace Swift;
 
 #define GLFW_STATIC
 
 int main() {
-	int width = 800,
-		height = 600,
-		mode = GLFW_WINDOW;
+	GlfwWindow *window = new GlfwWindow(800, 600, SW_WINDOW, "Swift::Engine test");
+	int width = window->getWidth(),
+		height = window->getHeight(),
+		mode = window->getMode();
 
-	if(!glfwInit()) {
-		fprintf(stderr, "Failed to initialize GLFW!\n");
-		return -1;
-	}
-	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 4);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 0);
-	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	if(!glfwOpenWindow( width, height, 0,0,0,0, 32, 0, mode)) {
-		fprintf(stderr, "Failed to open GLFW window\n");
-		glfwTerminate();
-		return -1;
-	}
 	glewExperimental = true;
 	if(glewInit() != GLEW_OK) {
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		glfwSleep(1.0);
 		return -1;
 	}
-	glfwSetWindowTitle("Swift::Engine test");
-	glfwEnable(GLFW_STICKY_KEYS);
 
 	cout << "=========================" << endl;
 	cout << "OpenGL version: " << Supervisor->getOpenGLversion() << endl;
@@ -48,7 +34,7 @@ int main() {
 			glm::vec3(0,0,0),	// target
 			glm::vec3(0,1,0),	// up vector
 			45.0f,				// field of view
-			4.0f/3.0f,			// aspect
+			(float)width/(float)height,			// aspect
 			0.1f,				// near clipping
 			100.0f				// far clipping
 		);
@@ -64,19 +50,47 @@ int main() {
 	Plane *p0 = new Plane(1000.0f, 1000.0f, glm::vec3(0,-10,0)),
 			*p1 = new Plane(10.0f, 10.0f, glm::vec3(-5,0,0), 3, 3);
 
-	Cube *c = new Cube(6.0f, glm::vec3(5,0,0));
+	Cube *c = new Cube(4.0f, glm::vec3(4,0,0));
 	
+	Mesh	*m = new Mesh("tree.obj"),
+			*m2 = new Mesh("Lara_Croft.obj"),
+			*m3 = new Mesh("teapot.obj"),
+			*m4 = new Mesh("monkey.obj");
+
+	//m->scale(glm::vec3(2.5f, 2.5f, 2.5f));
+	m2->move(glm::vec3(-5,0,0));
+	m2->scale(glm::vec3(2,2,2));
+	m2->rotate(glm::vec3(0,1,0), 180);
+	
+	m3->move(glm::vec3(-12,0,0));
+
+	m4->move(glm::vec3(-19,0,0));
+	m4->scale(glm::vec3(2,2,2));
+	m4->rotate(glm::vec3(0,1,0), 180);
+	//m->move(glm::vec3(-20, -2, 0));
+	//m->scale(glm::vec3(3.5f, 3.5f, 3.5f));
+	//m->rotate(glm::vec3(0,1,0), 180);
+
 	//MaterialManager->loadShader("default", "default.vxshader", "default.pxshader");
 	MaterialManager->loadShader("distance", "distance.vxshader", "distance.pxshader");
-	Material* def = new Material("distance");
+	MaterialManager->loadShader("default", "default.vxshader", "default.pxshader");
+	Material	*dist = new Material("distance"),
+				*def = new Material("default");
 
-	s1->setMaterial(def);
+	s1->setMaterial(dist);
 	s1->setName("Sfera 1");
 	//s2->setMaterial(def);
 	//s2->setName("Sfera 2");
-	p0->setMaterial(def);
-	p1->setMaterial(def);
-	c->setMaterial(def);
+	p0->setMaterial(dist);
+	p1->setMaterial(dist);
+	c->setMaterial(dist);
+	m->setMaterial(dist);
+	m2->setMaterial(dist);
+	m3->setMaterial(def);
+	m4->setMaterial(dist);
+	//m2->setMaterial(def);
+	//m3->setMaterial(def);
+	//m->hide();
 
 	Group* g = new Group(s1);
 	g->setName("Okon"); // Podajê has³o: okoñ.
@@ -84,29 +98,39 @@ int main() {
 	//g->add(p0);
 	g->add(p1);
 	g->add(c);
+	g->add(m);
+	g->add(m2);
+	g->add(m3);
+	g->add(m4);
+	//g->add(m2);
+	//g->add(m3);
 
 	/*
 	  to-do:
 	  -------
-		-!!!! ³adowanie modelu z pliku
 		-!!!! sto¿ek (cone)
 		-!!!! prostopad³oœcian (box)
-		-!!!! szeœcian (cube)
 		-!!!! predefiniowane: czajnik, ma³pa
 		-!!!! 'p¹czek' (torus)
 		-!!! sfera o równym roz³o¿eniu wierzcho³ków (ikosfera)
 		-!!!!! model oœwietlenia phonga
 			- œwiat³a -> punktowe i "obiektowe"
+		- "miêkkie" œwiat³a (soft shadows)
+		-!!! przemyœleæ co zrobiæ, ¿eby obiekt po prze³adowaniu pozostawa³ w swoim miejscu w którym by³ po przesuniêciu
 
 		-! przeliczaæ œrodek grupy po dodaniu ka¿dego obiektu
 		  (wspó³rzêdne w przestrzeni œwiata! a œrodek w przestrzeni "grupy" tj. grupie modeli)
 		-!! dodaæ transformacje grup (translacja, obrót itp.)
-		-!!! dodaæ kumulowane transformacje ¿eby jedna z kul mog³a siê obracaæ i wokó³ w³asnej osi i wokó³ drugiej kuli
+		-!!!! naprawiæ kumulowane transformacje ¿eby jedna z kul mog³a siê obracaæ i wokó³ w³asnej osi i wokó³ drugiej kuli
 		- poprawiæ distance shading -> maksymalna odleg³oœæ od obiektu
 		- poprawiæ material manager -> definiowanie zmiennych które bêdzie mo¿na przekazaæ do shadera ju¿ w aplikacji
 		  "roboczej" (tu example.cpp)
-		- tekstury!
-		- texture manager na uchwytach (materia³y te¿)
+		-!!!!! tekstury!
+		-!!!!! texture manager na uchwytach (materia³y te¿)
+
+		
+		-!!!! szeœcian (cube)			(done)
+		-!!!! ³adowanie modelu z pliku	(done, pozostaje .3ds, .blend i w³asny format)
 	*/
 
 	ObjectManager->add(g);
@@ -184,6 +208,8 @@ int main() {
 			s1->setSegmentCount(--s);
 			s1->setRingCount(--r);
 		}
+		if(glfwGetKey(GLFW_KEY_BACKSPACE) == GLFW_PRESS)
+			m->loadObj("teapot.obj");
 
 		cam->move(position, direction, up);
 		// obrót pierwszej kuli
@@ -196,8 +222,8 @@ int main() {
 		// s2->rotate(glm::vec3(0,1,0), 2*angle);
 
 		renderer->render();
-		glfwSwapBuffers();
-	} while (glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS && glfwGetWindowParam(GLFW_OPENED));
+		window->swapBuffers();
+	} while (glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS && window->isOpen());
 
 	delete g;
 	//delete s1;
@@ -206,7 +232,7 @@ int main() {
 	delete renderer;
 	delete cam;
 
-	glfwTerminate();
+	delete window;
 	// automatycznie zwalniaæ wszystkie wskaŸniki przez delete
 	return 0;
 }

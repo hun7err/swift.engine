@@ -4,7 +4,7 @@
 
 namespace Swift {
 	GLfloat* Object::getVertices() {
-		return &vertices[0];
+		return &(vertices[0].x);
 	}
 
 	Material* Object::getMaterial() {
@@ -30,6 +30,10 @@ namespace Swift {
 	void Object::move(const glm::vec3& newPos) {
 		glm::vec3 curPos = getPosition();
 		Model = glm::translate(Model, glm::vec3(newPos.x - curPos.x, newPos.y - curPos.y, newPos.z - curPos.z));
+	}
+
+	void Object::scale(const glm::vec3& factor) {
+		Model = glm::scale(Model, factor);
 	}
 
 	glm::vec3 Object::getPosition() {
@@ -69,20 +73,34 @@ namespace Swift {
 		return VBO;
 	}
 
+
+	GLuint Object::getNormalBuffer() {
+		return normalbuffer;
+	}
+
 	void Object::setup() {
 		Model = glm::translate(glm::mat4(1.0f), origin);
 		visible = true;
 
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
+		
+		glGenBuffers(1, &normalbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_DYNAMIC_DRAW);
+		reload();
+	}
 
+	void Object::reload() {
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_DYNAMIC_DRAW);
+	
 	}
 
 	void Object::destroy() {
 		glDeleteBuffers(1, &VBO);
+		glDeleteBuffers(1, &normalbuffer);
 		glDeleteVertexArrays(1, &VAO);
 
 		vertices.clear();

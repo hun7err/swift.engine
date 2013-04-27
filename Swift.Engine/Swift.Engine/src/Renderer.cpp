@@ -63,6 +63,18 @@ namespace Swift {
 					0,
 					(void*)0
 				);
+
+				/*glEnableVertexAttribArray(2);
+				glBindBuffer(GL_ARRAY_BUFFER, object->getNormalBuffer());
+				glVertexAttribPointer(
+					2,
+					3,
+					GL_FLOAT,
+					GL_FALSE,
+					0,
+					(void*)0
+				);*/
+
 				//printf("Vertices: \n");
 				//for(int i = 0; i < object->getVertexCount()-3; i++)
 				//	printf("%f %f %f\n", object->getVertices()[i], object->getVertices()[i+1], object->getVertices()[i+2]);

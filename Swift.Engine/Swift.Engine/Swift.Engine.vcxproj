@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Cube.h" />
+    <ClInclude Include="include\GlfwWindow.h" />
     <ClInclude Include="include\Group.h" />
     <ClInclude Include="include\Handle.h" />
     <ClInclude Include="include\HandleManager.h" />
     <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\MaterialManager.h" />
+    <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\ObjectManager.h" />
     <ClInclude Include="include\Plane.h" />
@@ -38,9 +40,11 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\example.cpp" />
+    <ClCompile Include="src\GlfwWindow.cpp" />
     <ClCompile Include="src\Group.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
     <ClCompile Include="src\Plane.cpp" />
