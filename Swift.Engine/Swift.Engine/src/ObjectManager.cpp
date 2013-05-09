@@ -5,6 +5,10 @@ namespace Swift {
 		groups.push_back(group);
 	}
 
+	void ObjectManagerClass::addLight(Light* light) {
+		lights.push_back(light);
+	}
+
 	void ObjectManagerClass::remove(std::string name) {
 		for(std::vector<Group*>::iterator it = groups.begin(); it != groups.end(); ++it)
 			if((*it)->getName() == name) {
@@ -20,6 +24,10 @@ namespace Swift {
 
 	std::vector<Group*>* ObjectManagerClass::getGroups() {
 		return &groups;
+	}
+
+	std::vector<Light*>* ObjectManagerClass::getLights() {
+		return &lights;
 	}
 
 	ObjectManagerClass::ObjectManagerClass(){

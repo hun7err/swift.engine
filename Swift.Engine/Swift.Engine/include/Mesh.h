@@ -6,7 +6,7 @@
 namespace Swift {
 	class Mesh : public Object {
 		public:
-			void loadObj(const char *filename);
+			int loadObj(const char *filename);
 			void load3DS(const char *filename);
 			void loadBlend(const char *filename);
 		Mesh(const glm::vec3& pos = glm::vec3(0,0,0));

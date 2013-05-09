@@ -3,34 +3,39 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include "Texture.h"
 //#include <GL/gl.h>
 
 namespace Swift {
 	class Material {
 		private:
 			GLuint shader;
-			// Texture* diffuseMap
-			glm::vec4 diffuse;
-			// Color diffuse
-			// Texture* specularMap
-			// Color specular
-			glm::vec4 specular;
-			glm::vec4 ambient;
-			float phongExponent;
-			// Texture* bumpMap
-			// Texture* normalMap
-			// float phongExponent
 			// float fresnel
 			// float IOR
 			// float opacity
-			// Color ambient
 
+			// ILuint -> tekstura
 		public:
+			glm::vec3 DiffuseColor;
+			glm::vec3 SpecularColor;
+			glm::vec3 AmbientColor;
+
+			int PhongExponent;
 			void setShader(std::string name);
-			GLuint getShaderID();
+			GLuint getProgramID();
 		Material();
-		Material(std::string shaderName);
+		Material(std::string shaderName, glm::vec3 _DiffuseColor = glm::vec3(1.0f), glm::vec3 _SpecularColor = glm::vec3(0.7f), glm::vec3 _AmbientColor = glm::vec3(0.3f), int _PhongExponent = 50);
 		~Material();
+	};
+
+	class MaterialPtr {
+		public:
+			unsigned int key;
+			Material operator* ();
+			Material operator->();
+			void setKey(unsigned int _key);
+		MaterialPtr();
+		MaterialPtr(unsigned int _key);
 	};
 }
 

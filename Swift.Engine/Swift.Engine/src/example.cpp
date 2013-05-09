@@ -11,10 +11,9 @@ using namespace Swift;
 #define GLFW_STATIC
 
 int main() {
-	GlfwWindow *window = new GlfwWindow(800, 600, SW_WINDOW, "Swift::Engine test");
-	int width = window->getWidth(),
-		height = window->getHeight(),
-		mode = window->getMode();
+	//int width = 1366, height = 768, mode = SW_FULLSCREEN;
+	int width = 800, height = 600, mode = SW_WINDOW;
+	GlfwWindow *window = new GlfwWindow(width, height, mode, "Swift::Engine test");
 
 	glewExperimental = true;
 	if(glewInit() != GLEW_OK) {
@@ -30,7 +29,7 @@ int main() {
 	cout << "=========================" << endl;
 	
 	Camera *cam = new Camera(
-			glm::vec3(7,5,-12),	// location
+			glm::vec3(-2,2,-12),	// location
 			glm::vec3(0,0,0),	// target
 			glm::vec3(0,1,0),	// up vector
 			45.0f,				// field of view
@@ -38,73 +37,85 @@ int main() {
 			0.1f,				// near clipping
 			100.0f				// far clipping
 		);
-	
+	printf("new Renderer()\n");
 	Renderer *renderer = new Renderer();
 	//renderer->clearColor(0.0f, 0.0f, 0.4f, 0.0f);
-	renderer->clearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	renderer->clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	renderer->setCamera(cam);
 
-	Sphere	*s1 = new Sphere(3, 55, 29, glm::vec3(0,0,0));//,
-		//	*s2 = new Sphere(1, 25, 19, glm::vec3(5,0,0));
+	Mesh *monkey = new Mesh("monkey.obj"),
+		 *teapot = new Mesh("teapot.obj"),
+		 *lara = new Mesh("Lara_Croft.obj"),
+		 *tank = new Mesh("t-90a.new.obj");
 
-	Plane *p0 = new Plane(1000.0f, 1000.0f, glm::vec3(0,-10,0)),
-			*p1 = new Plane(10.0f, 10.0f, glm::vec3(-5,0,0), 3, 3);
+	/*if(ret == SW_FAILURE) {
+		printf("Failed to load T-90 model\n");
+		return -1;
+	}*/
 
-	Cube *c = new Cube(4.0f, glm::vec3(4,0,0));
+	monkey->move(glm::vec3(-3,0,0));
+	monkey->rotate(glm::vec3(0,1,0), 180);
+	teapot->move(glm::vec3(-2,1,2.0f));
+	teapot->scale(glm::vec3(0.2f)); // 0.2
+	tank->move(glm::vec3(0.0f));
+	tank->scale(glm::vec3(2.0f));
+
+	Sphere *s = new Sphere(3.0f, 70, 50, glm::vec3(2,0,0)),
+			*kula = new Sphere(1.0f, 30, 20, glm::vec3(-1,-2,-2));
+
+	Light *light = new Light(glm::vec3(1.0f), glm::vec3(-3.0f,1.0f,-2.5f), 1.5f),
+			*light2 = new Light(glm::vec3(0,0,1.0f), glm::vec3(2.5f,3.0f,-3.9f), 3.0f),
+			*light3 = new Light(glm::vec3(0,1.0f,0), glm::vec3(-2,5,0),5.0f),
+			*light4 = new Light(glm::vec3(1.0f), glm::vec3(-2,6,1.0f), 3.0f);
+
+	MaterialManager->loadShaders("phongblinn");
+	MaterialManager->loadShaders("lambert");
+
+	Material mmat("phongblinn", glm::vec3(0.0f,1.0f,0.0f), glm::vec3(1.0f), glm::vec3(0.1f)),
+			tmat("phongblinn", glm::vec3(1.0f,0.0f,0.0f), glm::vec3(1.0f), glm::vec3(0.1f), 5),
+			smat("phongblinn", glm::vec3(0.0f,0.0f,1.0f), glm::vec3(1.0f), glm::vec3(0.1f), 20),
+			cmat("lambert", glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(0.3f));
+	//printf("Przed przypisaniem materialow\n");
+	MaterialPtr monkeymtl = MaterialManager->addMaterial(mmat),
+				teapotmtl = MaterialManager->addMaterial(tmat),
+				spheremtl = MaterialManager->addMaterial(smat),
+				clay = MaterialManager->addMaterial(cmat);
+	//printf("Po przypisaniu materialow\n");
+
+	//printf("Sfera\n");
+	s->setMaterial(spheremtl);
+	//printf("Malpa\n");
+	monkey->setMaterial(monkeymtl);
+	//printf("Czajnik\n");
+	teapot->setMaterial(teapotmtl);
+	kula->setMaterial(clay);
+	lara->setMaterial(clay);
+	tank->setMaterial(clay);
+
+	//printf("czesci w czolgu: %d\n", tank->getPartCount());
 	
-	Mesh	*m = new Mesh("tree.obj"),
-			*m2 = new Mesh("Lara_Croft.obj"),
-			*m3 = new Mesh("teapot.obj"),
-			*m4 = new Mesh("monkey.obj");
-
-	//m->scale(glm::vec3(2.5f, 2.5f, 2.5f));
-	m2->move(glm::vec3(-5,0,0));
-	m2->scale(glm::vec3(2,2,2));
-	m2->rotate(glm::vec3(0,1,0), 180);
+	//printf("Wszystko ok\n");
+	//light1->setMaterial(def);
 	
-	m3->move(glm::vec3(-12,0,0));
+	//teapot->setMaterial(phong);
 
-	m4->move(glm::vec3(-19,0,0));
-	m4->scale(glm::vec3(2,2,2));
-	m4->rotate(glm::vec3(0,1,0), 180);
-	//m->move(glm::vec3(-20, -2, 0));
-	//m->scale(glm::vec3(3.5f, 3.5f, 3.5f));
-	//m->rotate(glm::vec3(0,1,0), 180);
+	Group* g = new Group();
+	//s->hide();
+	//monkey->hide();
+	//teapot->hide();
+	//kula->hide();
+	lara->hide();
 
-	//MaterialManager->loadShader("default", "default.vxshader", "default.pxshader");
-	MaterialManager->loadShader("distance", "distance.vxshader", "distance.pxshader");
-	MaterialManager->loadShader("default", "default.vxshader", "default.pxshader");
-	Material	*dist = new Material("distance"),
-				*def = new Material("default");
 
-	s1->setMaterial(dist);
-	s1->setName("Sfera 1");
-	//s2->setMaterial(def);
-	//s2->setName("Sfera 2");
-	p0->setMaterial(dist);
-	p1->setMaterial(dist);
-	c->setMaterial(dist);
-	m->setMaterial(dist);
-	m2->setMaterial(dist);
-	m3->setMaterial(def);
-	m4->setMaterial(dist);
-	//m2->setMaterial(def);
-	//m3->setMaterial(def);
-	//m->hide();
+	g->add(s);
+	g->add(monkey);
+	g->add(teapot);
+	g->add(kula);
+	//g->add(lara);
+	g->add(tank);
 
-	Group* g = new Group(s1);
-	g->setName("Okon"); // Podajê has³o: okoñ.
-	//g->add(s2);
-	//g->add(p0);
-	g->add(p1);
-	g->add(c);
-	g->add(m);
-	g->add(m2);
-	g->add(m3);
-	g->add(m4);
-	//g->add(m2);
-	//g->add(m3);
-
+	//for(int i = 0; i < 3; i++) printf("mtl key: %d\n", g->getObjectAt(i)->getPartAt(0).getMaterial().key);
+	
 	/*
 	  to-do:
 	  -------
@@ -134,6 +145,10 @@ int main() {
 	*/
 
 	ObjectManager->add(g);
+	ObjectManager->addLight(light);
+	ObjectManager->addLight(light2);
+	ObjectManager->addLight(light3);
+	ObjectManager->addLight(light4);
 
 	// render loop
 	float angle = 0.5f;
@@ -150,10 +165,18 @@ int main() {
 	float speed = 15.0f;
 	float mouseSpeed = 0.05f;
 	
-	renderer->setRenderMode(SW_WIREFRAME);
+	renderer->setRenderMode(SW_SOLID);
 	double lastTime = glfwGetTime();
+	bool clicked = false;
 
+	glm::vec3 light_pos = glm::vec3(-3.0f,1.0f,-2.5f);
+
+	//light2->move(glm::vec3(1.0f,1.5f,-1.9f));
+
+	double angle2 = 0;
 	do {
+		//light->_move(glm::vec3(4.5f*cos(angle),1.5f,4.5f*sin(angle)));
+
 		double currentTime = glfwGetTime();
 		float deltaTime = float(currentTime - lastTime);
 		lastTime = currentTime;
@@ -184,32 +207,11 @@ int main() {
 			position += right * deltaTime * speed;
 		if(glfwGetKey(GLFW_KEY_LEFT) == GLFW_PRESS)
 			position -= right * deltaTime * speed;
-		if(glfwGetKey(GLFW_KEY_SPACE) == GLFW_PRESS)
-			renderer->setRenderMode(SW_SOLID);
-		if(glfwGetKey(GLFW_KEY_KP_ADD) == GLFW_PRESS) {
-			int hs = p1->getHeightSegCount(),
-				ws = p1->getWidthSegCount();
-			p1->setHeightSegCount(++hs);
-			p1->setWidthSegCount(++ws);
-		}
-		if(glfwGetKey(GLFW_KEY_F3) == GLFW_PRESS) {
-			int s = c->getSegCount();
-			c->setSegCount(++s);
-		}
-		if(glfwGetKey(GLFW_KEY_F1) == GLFW_PRESS) {
-			int s = s1->getSegmentCount(),
-				r = s1->getRingCount();
-			s1->setSegmentCount(++s);
-			s1->setRingCount(++r);
-		}
-		if(glfwGetKey(GLFW_KEY_F2) == GLFW_PRESS) {
-			int s = s1->getSegmentCount(),
-				r = s1->getRingCount();
-			s1->setSegmentCount(--s);
-			s1->setRingCount(--r);
-		}
-		if(glfwGetKey(GLFW_KEY_BACKSPACE) == GLFW_PRESS)
-			m->loadObj("teapot.obj");
+		if(glfwGetKey(GLFW_KEY_SPACE) == GLFW_PRESS && !clicked) {
+			renderer->setRenderMode(1 - renderer->getRenderMode());
+			clicked = true;
+		} else if (glfwGetKey(GLFW_KEY_SPACE) == GLFW_RELEASE) 
+			clicked = false;
 
 		cam->move(position, direction, up);
 		// obrót pierwszej kuli
@@ -220,7 +222,14 @@ int main() {
 		//p1->rotate(glm::vec3(0,1,0), 0.5*angle);
 
 		// s2->rotate(glm::vec3(0,1,0), 2*angle);
-
+		//light1->rotate(glm::vec3(0,1,0), angle);
+		
+		//glm::vec3(-3.0f,1.0f,-2.5f)
+		angle2 += 0.01f;
+		light->move(light_pos + glm::vec3(0,0,2*sin(angle2)));
+		light2->rotate(glm::vec3(0,1,0), angle);
+		light3->rotate(glm::vec3(0,1,0), -2 * angle);
+		light4->rotate(glm::vec3(0,1,0), -angle);
 		renderer->render();
 		window->swapBuffers();
 	} while (glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS && window->isOpen());
@@ -228,7 +237,6 @@ int main() {
 	delete g;
 	//delete s1;
 	//delete s2;
-	delete def;
 	delete renderer;
 	delete cam;
 

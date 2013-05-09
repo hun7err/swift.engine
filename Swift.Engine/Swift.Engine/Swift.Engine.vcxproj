@@ -21,20 +21,25 @@
   <ItemGroup>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Cube.h" />
+    <ClInclude Include="include\Defines.h" />
     <ClInclude Include="include\GlfwWindow.h" />
     <ClInclude Include="include\Group.h" />
     <ClInclude Include="include\Handle.h" />
     <ClInclude Include="include\HandleManager.h" />
+    <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\MaterialManager.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\ObjectManager.h" />
+    <ClInclude Include="include\ObjectPart.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\Sphere.h" />
     <ClInclude Include="include\Supervisor.h" />
+    <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
@@ -42,15 +47,19 @@
     <ClCompile Include="src\example.cpp" />
     <ClCompile Include="src\GlfwWindow.cpp" />
     <ClCompile Include="src\Group.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
+    <ClCompile Include="src\ObjectPart.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
     <ClCompile Include="src\Supervisor.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7C3C7E43-E518-41F4-8481-F7A1AEDF8B13}</ProjectGuid>
@@ -94,6 +103,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;user32.lib;kernel32.lib;GLFW.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -107,6 +117,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;user32.lib;kernel32.lib;GLFW.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -116,8 +127,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>OpenGL32.lib;glew32.lib;user32.lib;kernel32.lib;GLFW.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;user32.lib;kernel32.lib;GLFW.lib;DevIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <ClCompile>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

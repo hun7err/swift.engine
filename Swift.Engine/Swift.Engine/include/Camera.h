@@ -2,9 +2,9 @@
 #define CAMERA_H
 
 /**
- * @file Camera.h
+ * \file Camera.h
  * Basic camera class: enough for simple usage
- * @author Krzysztof 'hun7er' Marciniak
+ * \author Krzysztof 'hun7er' Marciniak
  */
 
 #include <glm/glm.hpp>
@@ -12,7 +12,7 @@
 namespace Swift {
 	class Camera {
 		private:
-			float fov;	/** Field Of View - the angle between left side and riht side */
+			float fov;	/** Field Of View - the angle between left side and right side */
 			float aspect;	/** Aspect Ratio - window width/height */
 			float nearClipping;	/**	Distance after which (going to 0) the object should be marked as being too close to be rendered */
 			float farClipping;	/** Distance after which (going to infinity) the object should be treated as being too far to be rendered */
@@ -27,7 +27,6 @@ namespace Swift {
 			/*
 				to-add:
 					- pitch/yaw/roll
-					- move
 			*/
 
 			void setFoV(const float &_fov);	/** Set FOV value */

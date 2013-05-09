@@ -1,0 +1,37 @@
+﻿Build started 2013-04-28 18:25:22.
+     1>Project "C:\Users\hun7er\Documents\GitHub\swift.engine\Swift.Engine\Swift.Engine\Swift.Engine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /O2 /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc110.pdb" /Gd /TP /errorReport:prompt src\Cube.cpp src\Group.cpp src\Mesh.cpp src\Object.cpp src\ObjectManager.cpp src\Plane.cpp src\Renderer.cpp src\Sphere.cpp src\Supervisor.cpp src\example.cpp
+         Cube.cpp
+         Group.cpp
+         Mesh.cpp
+         Object.cpp
+         ObjectManager.cpp
+         Plane.cpp
+         Renderer.cpp
+         Sphere.cpp
+         Supervisor.cpp
+         example.cpp
+         Generating Code...
+     1>c:\users\hun7er\documents\github\swift.engine\swift.engine\swift.engine\src\group.cpp(37): warning C4715: 'Swift::Group::getObject' : not all control paths return a value
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\hun7er\Documents\GitHub\swift.engine\Swift.Engine\x64\Release\Swift.Engine.exe" /NOLOGO OpenGL32.lib glew32.lib user32.lib kernel32.lib GLFW.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:\Users\hun7er\Documents\GitHub\swift.engine\Swift.Engine\x64\Release\Swift.Engine.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\hun7er\Documents\GitHub\swift.engine\Swift.Engine\x64\Release\Swift.Engine.lib" /MACHINE:X64 x64\Release\Camera.obj
+         x64\Release\Cube.obj
+         x64\Release\example.obj
+         x64\Release\GlfwWindow.obj
+         x64\Release\Group.obj
+         x64\Release\Material.obj
+         x64\Release\MaterialManager.obj
+         x64\Release\Mesh.obj
+         x64\Release\Object.obj
+         x64\Release\ObjectManager.obj
+         x64\Release\Plane.obj
+         x64\Release\Renderer.obj
+         x64\Release\Sphere.obj
+         x64\Release\Supervisor.obj
+         Swift.Engine.vcxproj -> C:\Users\hun7er\Documents\GitHub\swift.engine\Swift.Engine\x64\Release\Swift.Engine.exe
+     1>Done Building Project "C:\Users\hun7er\Documents\GitHub\swift.engine\Swift.Engine\Swift.Engine\Swift.Engine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:15.02

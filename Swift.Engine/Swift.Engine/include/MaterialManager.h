@@ -25,6 +25,7 @@
 // STL
 #include <map>
 #include <string>
+#include <vector>
 // platform-specific
 #ifdef _WIN32
 	#include <Windows.h>
@@ -38,15 +39,13 @@
 namespace Swift {
 	class MaterialManagerClass/* : public Singleton<MaterialManager>*/ {
 		private:
-			std::map<std::string, Material*> materials;
-			std::map<std::string, GLuint> shaders;
-			// (lista shaderów jakaœ)
+			std::vector<Material> materials;
+			std::map<std::string, GLuint> programs;
 		public:
-			// Material* get(std::string name)
-			// void add(Material* mtl)
-			// loadShader(vertex_shader_name, pixel_shader_name)
-			void loadShader(std::string shader_name, std::string vertex_shader_name, std::string pixel_shader_name);
-			unsigned int getShader(std::string name);
+			int loadShaders(std::string shader_name);
+			unsigned int getProgram(std::string name);
+			Material& getMaterial(unsigned int key);
+			MaterialPtr addMaterial(Material mtl);
 		MaterialManagerClass();
 		~MaterialManagerClass();
 	};

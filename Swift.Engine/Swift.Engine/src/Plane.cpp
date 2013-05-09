@@ -9,12 +9,14 @@ namespace Swift {
 		widthSegs = widthSegments;
 
 		//move(pos);
-
+		parts.resize(1);
+		
+		parts[0].setup();
 		calculateVertices();
 	}
 
 	Plane::~Plane() {
-		destroy();
+		parts[0].destroy();
 	}
 
 	void Plane::calculateVertices() {
@@ -24,7 +26,7 @@ namespace Swift {
 		double	xstart = origin.x - width/2,
 				zstart = origin.z - height/2;
 
-		vertices.clear();
+		parts[0].vertices.clear();
 
 		for (int i = 0; i < widthSegs; i++) {
 			for(int j = 0; j < heightSegs; j++) {
@@ -35,17 +37,17 @@ namespace Swift {
 				// vertices are oriented CW (clockwise)
 				
 				// first triangle
-				vertices.push_back(p0);
-				vertices.push_back(p1);
-				vertices.push_back(p3);
+				parts[0].vertices.push_back(p0);
+				parts[0].vertices.push_back(p1);
+				parts[0].vertices.push_back(p3);
 				
 				// second triangle
-				vertices.push_back(p1);
-				vertices.push_back(p2);
-				vertices.push_back(p3);
+				parts[0].vertices.push_back(p1);
+				parts[0].vertices.push_back(p2);
+				parts[0].vertices.push_back(p3);
 			}
 		}
-		setup();
+		parts[0].reload();
 	}
 	
 	int Plane::getHeightSegCount() {
@@ -56,11 +58,11 @@ namespace Swift {
 		return widthSegs;
 	}
 	
-	int Plane::getWidth(){
+	double Plane::getWidth(){
 		return width;
 	}
 	
-	int Plane::getHeight(){
+	double Plane::getHeight(){
 		return height;
 	}
 	

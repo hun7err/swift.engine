@@ -1,0 +1,96 @@
+\documentclass{book}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{makeidx}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{ifthen}
+\usepackage[table]{xcolor}
+\usepackage{textcomp}
+\usepackage{alltt}
+\usepackage{ifpdf}
+\ifpdf
+\usepackage[pdftex,
+            pagebackref=true,
+            colorlinks=true,
+            linkcolor=blue,
+            unicode
+           ]{hyperref}
+\else
+\usepackage[ps2pdf,
+            pagebackref=true,
+            colorlinks=true,
+            linkcolor=blue,
+            unicode
+           ]{hyperref}
+\usepackage{pspicture}
+\fi
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[T1]{fontenc}
+
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+\usepackage{sectsty}
+\usepackage{amssymb}
+\usepackage[titles]{tocloft}
+\usepackage{doxygen}
+\lstset{language=C++,inputencoding=utf8,basicstyle=\footnotesize,breaklines=true,breakatwhitespace=true,tabsize=4,numbers=left }
+\makeindex
+\setcounter{tocdepth}{3}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\familydefault}{\sfdefault}
+\hfuzz=15pt
+\setlength{\emergencystretch}{15pt}
+\hbadness=750
+\tolerance=750
+\begin{document}
+\hypersetup{pageanchor=false,citecolor=blue}
+\begin{titlepage}
+\vspace*{7cm}
+\begin{center}
+{\Large Swift\-:\-:Engine }\\
+\vspace*{1cm}
+{\large Wygenerowano przez Doxygen 1.8.3.1}\\
+\vspace*{0.5cm}
+{\small Pn, 29 kwi 2013 00:06:12}\\
+\end{center}
+\end{titlepage}
+\clearemptydoublepage
+\pagenumbering{roman}
+\tableofcontents
+\clearemptydoublepage
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true,citecolor=blue}
+\chapter{Indeks hierarchiczny}
+\input{hierarchy}
+\chapter{Indeks klas}
+\input{annotated}
+\chapter{Indeks plików}
+\input{files}
+\chapter{Dokumentacja klas}
+\input{class_swift_1_1_camera}
+\input{class_swift_1_1_cube}
+\input{class_swift_1_1_glfw_window}
+\input{class_swift_1_1_group}
+\input{class_swift_1_1_material}
+\input{class_swift_1_1_material_manager_class}
+\input{class_swift_1_1_mesh}
+\input{class_swift_1_1_object}
+\input{class_swift_1_1_object_manager_class}
+\input{class_swift_1_1_plane}
+\input{class_swift_1_1_renderer}
+\input{class_singleton}
+\input{class_swift_1_1_sphere}
+\input{class_supervisor}
+\input{class_swift_1_1_supervisor_class}
+\chapter{Dokumentacja plików}
+\input{_camera_8h}
+\input{_supervisor_8h}
+\addcontentsline{toc}{part}{Indeks}
+\printindex
+\end{document}

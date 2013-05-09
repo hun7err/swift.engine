@@ -14,8 +14,8 @@ namespace Swift {
 		public:
 			int getHeightSegCount();
 			int getWidthSegCount();
-			int getWidth();
-			int getHeight();
+			double getWidth();
+			double getHeight();
 			void setHeightSegCount(int count);
 			void setWidthSegCount(int count);
 		Plane(double _width, double _height, const glm::vec3& pos = glm::vec3(0,0,0),  int heightSegments = 1, int widthSegments = 1);

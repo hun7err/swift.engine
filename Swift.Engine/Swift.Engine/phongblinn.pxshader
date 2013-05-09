@@ -1,0 +1,54 @@
+#version 330 core
+
+out vec3 color;
+uniform vec3 DiffuseColor;
+uniform vec3 AmbientColor;
+uniform vec3 SpecularColor;
+uniform int PhongExponent;
+
+struct Light {
+	vec3 pos;
+	vec3 color;
+	float intensity;
+	mat4 model;
+};
+
+uniform Light Lights[64];
+uniform int LightCount;
+
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Perspective;
+
+in vec3 vertexPosition_worldspace;
+in vec3 Normal_cameraspace;
+
+void main() {
+	vec3 vertexPosition_cameraspace = (View * vec4(vertexPosition_worldspace,1)).xyz;
+
+	vec3 lambertTerm = vec3(0.0f);
+	vec3 phongTerm = vec3(0.0f);
+	vec3 n = normalize(Normal_cameraspace);
+	vec3 eyeDir_cameraspace = -vertexPosition_cameraspace; // -
+	vec3 v = normalize(eyeDir_cameraspace);
+	
+	for(int i = 0; i < LightCount; i++) {
+		vec3 lightPos_cameraspace = (View * Lights[i].model * vec4(Lights[i].pos,1)).xyz;
+		vec3 lightDir_cameraspace = lightPos_cameraspace - vertexPosition_cameraspace;
+		
+		vec3 l = normalize(lightDir_cameraspace); // bez -
+		vec3 r = reflect(-l, n);
+
+		float dist = distance(vertexPosition_worldspace, Lights[i].pos);
+		float attenuation = 1/(2 * dist);
+		float LightPower = Lights[i].intensity;
+		vec3 LightColor = Lights[i].color;
+
+		float lambert = clamp(dot(n,l),0,1);
+		lambertTerm += LightColor * attenuation * LightPower * lambert;
+
+		float phong = clamp(dot(v,r),0,1);
+		phongTerm += LightColor * attenuation * LightPower * pow(phong, PhongExponent);
+	}
+	color = AmbientColor*DiffuseColor + DiffuseColor * lambertTerm + SpecularColor * phongTerm;
+}

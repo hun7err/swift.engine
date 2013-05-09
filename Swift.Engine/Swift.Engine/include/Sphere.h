@@ -8,17 +8,17 @@ namespace Swift {
 	class Sphere : public Object {
 		private:
 			int segments; // segment count
-			int radius; // radius
+			double radius; // radius
 			int rings; // ring count
 			void calculateVertices();
 		public:
 			int getSegmentCount();
-			int getRadius();
+			double getRadius();
 			int getRingCount();
 			void setSegmentCount(int _segments);
 			void setRingCount(int _rings);
-			void setRadius(int _radius);
-		Sphere(double _radius, int _segments, int _rings, glm::vec3 center);
+			void setRadius(double _radius);
+		Sphere(double _radius, int _segments, int _rings, glm::vec3 center = glm::vec3(0,0,0));
 		~Sphere();
 	};
 }

@@ -1,0 +1,39 @@
+#version 330 core
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 VertexPosition;
+layout(location = 1) in vec3 VertexNormal;
+
+struct Light {
+	vec3 pos;
+	vec3 color;
+	float intensity;
+	mat4 model;
+};
+
+// Matrices: Model (transformations), View (for camera space), Perspective (for perspective deformation)
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Perspective;
+// Lights
+uniform Light Lights[64];
+uniform int LightCount;
+// Camera
+uniform vec3 CameraPosition;
+// Material
+uniform vec3 DiffuseColor;
+uniform vec3 AmbientColor;
+uniform vec3 SpecularColor;
+uniform int PhongExponent;
+
+out vec3 vertexPosition_worldspace;
+out vec3 Normal_cameraspace;
+out vec3 LightDir0;
+
+void main(){
+	vertexPosition_worldspace = (Model * vec4(VertexPosition, 1)).xyz;
+	gl_Position =  Perspective * View * vec4(vertexPosition_worldspace,1);
+
+	Normal_cameraspace = (View * Model * vec4(VertexNormal,0)).xyz;
+}
+
