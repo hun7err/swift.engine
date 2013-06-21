@@ -1,0 +1,40 @@
+kilka wersji shadera dla różnej ilości świateł, wtedy znaczne przyspieszenie (mniej iteracji)
+max phong ~300-400
+macierz tekstury -> transformacje na teksturze (do np. animowanych tekstur)
+
+jedna teksturowania -> pobieranie koloru z określonych współrzędnych
+
+
+
+proces teksturowania w OGLu:
+
+.--------------------------------------------------------------------.
+|                                                                    |
+| #OGL          #VS             interp    #FS                        |
+| wczytanie     interpolacja   ------->   pobierz kolor              |
+| tex           wsp. tekst.        |            |                    |
+|                  ^ .-------------'            v                    |
+| skojarzyć        | |                    wykorzystaj kolor          |
+| tex z jed.       | |                                               |
+| tekst.      atr. | |                                               |
+|                  | |                                               |
+| powiedzieć    -----' jednorodna                                    |
+| FS o jedn. t.    |                                                 |
+|                  |                                                 |
+| przekazać        |                                                 |
+| wsp. tex      ---'                                                 |
+| do VS                                                              |
+|                                                                    |
+'--------------------------------------------------------------------'
+
+
+^--- atr. = atrybut, wsp. = współrzędne, tekst. = teksturowania, jedn.t. = jednostce teksturującej
+
+glBindTexture przypisuje teksturę do aktywnej jednostki teksturującej:
+
+glActiveTexture(GL_TEXTURE0);   // 0. jednostka teksturująca
+glBindTexture(GL_TEXTURE_2D, tex0);
+
+wiązanie jednostki teksturującej:
+
+glUniform1i(shaderProgram->getUniformLocation("textureMap0"), 0);

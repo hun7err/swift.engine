@@ -20,11 +20,18 @@ namespace Swift {
 			glm::vec3 SpecularColor;
 			glm::vec3 AmbientColor;
 
-			int PhongExponent;
+			float PhongExponent;
 			void setShader(std::string name);
 			GLuint getProgramID();
+			std::string name;
+
+			TexturePtr DiffuseMap;
+			TexturePtr SpecularMap;
+			TexturePtr AmbientMap;
+			TexturePtr NormalMap;
+			TexturePtr BumpMap;
 		Material();
-		Material(std::string shaderName, glm::vec3 _DiffuseColor = glm::vec3(1.0f), glm::vec3 _SpecularColor = glm::vec3(0.7f), glm::vec3 _AmbientColor = glm::vec3(0.3f), int _PhongExponent = 50);
+		Material(std::string shaderName, glm::vec3 _DiffuseColor = glm::vec3(1.0f), glm::vec3 _SpecularColor = glm::vec3(0.7f), glm::vec3 _AmbientColor = glm::vec3(0.3f), float _PhongExponent = 50.0f);
 		~Material();
 	};
 
@@ -32,7 +39,7 @@ namespace Swift {
 		public:
 			unsigned int key;
 			Material operator* ();
-			Material operator->();
+			Material* operator->();
 			void setKey(unsigned int _key);
 		MaterialPtr();
 		MaterialPtr(unsigned int _key);

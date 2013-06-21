@@ -47,6 +47,15 @@ namespace Swift {
 			(*it).show();
 	}
 
+	bool Object::isVisible() {
+		int visible = 0;
+		for(std::vector<ObjectPart>::iterator it = parts.begin(); it != parts.end(); ++it)
+			visible |= (int)(*it).isVisible();
+		if(visible == 0)
+			return false;
+		else return true;
+	}
+
 	ObjectPart& Object::getPartAt(unsigned int pos) {
 		return parts[pos];
 	}

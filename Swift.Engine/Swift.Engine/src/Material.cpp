@@ -24,15 +24,15 @@ namespace Swift {
 		key = _key;
 	}
 
-	Material MaterialPtr::operator->() {
-		return MaterialManager->getMaterial(key);
+	Material* MaterialPtr::operator->() {
+		return &(MaterialManager->getMaterial(key));
 	}
 
 	MaterialPtr::MaterialPtr(unsigned int _key) {
 		key = _key;
 	}
 
-	Material::Material(std::string shaderName, glm::vec3 _DiffuseColor, glm::vec3 _SpecularColor, glm::vec3 _AmbientColor, int _PhongExponent) {
+	Material::Material(std::string shaderName, glm::vec3 _DiffuseColor, glm::vec3 _SpecularColor, glm::vec3 _AmbientColor, float _PhongExponent) {
 		DiffuseColor = _DiffuseColor;
 		SpecularColor = _SpecularColor;
 		AmbientColor = _AmbientColor;

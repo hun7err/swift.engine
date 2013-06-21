@@ -38,12 +38,6 @@ namespace Swift {
 			void show();
 			GLuint getUVbuffer();
 
-			TexturePtr DiffuseMap;
-			TexturePtr SpecularMap;
-			TexturePtr AmbientMap;
-			TexturePtr NormalMap;
-			TexturePtr BumpMap;
-
 			unsigned int getVertexCount();
 
 			std::string getAlias();

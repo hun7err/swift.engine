@@ -3,6 +3,7 @@
 // Input vertex data, different for all executions of this shader.
 layout(location = 0) in vec3 VertexPosition;
 layout(location = 1) in vec3 VertexNormal;
+layout(location = 2) in vec2 VertexUV;
 
 struct Light {
 	vec3 pos;
@@ -29,11 +30,13 @@ uniform int PhongExponent;
 out vec3 vertexPosition_worldspace;
 out vec3 Normal_cameraspace;
 out vec3 LightDir0;
+out vec2 UV;
 
 void main(){
 	vertexPosition_worldspace = (Model * vec4(VertexPosition, 1)).xyz;
 	gl_Position =  Perspective * View * vec4(vertexPosition_worldspace,1);
 
 	Normal_cameraspace = (View * Model * vec4(VertexNormal,0)).xyz;
+	UV = VertexUV;
 }
 

@@ -31,14 +31,17 @@ namespace Swift {
 
 				Object* object = *j; // dla u³atwienia
 				for(int i = 0; i < object->getPartCount(); i++) { // dla ka¿dej czêœci obiektu
-					printf("part count: %d\n", object->getPartCount());
+					//printf("part count: %d\n", object->getPartCount());
 					if(object->getPartAt(i).isVisible()) { // renderujê tylko widoczne czêœci
+						//glBindVertexArray(object->getPartAt(i).getVAO());
 						//printf("key: %d\n", object->getPartAt(i).getMaterial().key);
-						Material mtl = MaterialManager->getMaterial(object->getPartAt(i).getMaterial().key); // z MaterialManager pobieramy materia³ o kluczu
+						MaterialPtr mtl = object->getPartAt(i).getMaterial(); // z MaterialManager pobieramy materia³ o kluczu
 						
 						//printf("i = %d, Diffuse: %f %f %f, program ID: %d\n", i, mtl.DiffuseColor.r, mtl.DiffuseColor.g, mtl.DiffuseColor.b, mtl.getProgramID());
-						GLuint programID = mtl.getProgramID(); // pobieram ID programu (z³o¿onego z shaderów) dla renderowanej czêœci
-						
+						GLuint programID = (*mtl).getProgramID(); // pobieram ID programu (z³o¿onego z shaderów) dla renderowanej czêœci
+						//printf("ID programu (*mtl): %d\n", (*mtl).getProgramID());
+						//printf("ID programu -> : %d\n", mtl->getProgramID());
+
 						glUseProgram(programID);
 
 						// tu pobieram sloty pod którymi po³o¿one s¹ konkretne zmienne jednorodne:
@@ -52,7 +55,10 @@ namespace Swift {
 						GLuint SpecularColor = glGetUniformLocation(programID, "SpecularColor");
 						GLuint PhongExponent = glGetUniformLocation(programID, "PhongExponent");
 						GLuint LightCount = glGetUniformLocation(programID, "LightCount");
-				
+						GLuint DiffuseTex = glGetUniformLocation(programID, "DiffuseSampler"); // tu przeka¿emy shaderowi po³o¿enie samplera
+
+						
+						
 						glUniformMatrix4fv(ModelSlot, 1, GL_FALSE, &(object->getPartAt(i).getModelMatrix())[0][0]);
 						glUniformMatrix4fv(ViewSlot, 1, GL_FALSE, &(cam->getView())[0][0]);
 						glUniformMatrix4fv(PerspSlot, 1, GL_FALSE, &(cam->getProjection())[0][0]);
@@ -61,11 +67,13 @@ namespace Swift {
 						glUniform3f(cameraSlot, cam->getPosition().x, cam->getPosition().y, cam->getPosition().z);
 
 						// przekazujê wartoœci pod odpowiednie sloty
-						glUniform3fv(DiffuseColor, 1, &mtl.DiffuseColor.r);
-						glUniform3fv(AmbientColor, 1, &mtl.AmbientColor.r);
-						glUniform3fv(SpecularColor, 1, &mtl.SpecularColor.r);
-						glUniform1i(PhongExponent, mtl.PhongExponent);
+						glUniform3fv(DiffuseColor, 1, &mtl->DiffuseColor.r);
+						glUniform3fv(AmbientColor, 1, &mtl->AmbientColor.r);
+						glUniform3fv(SpecularColor, 1, &mtl->SpecularColor.r);
+						glUniform1f(PhongExponent, mtl->PhongExponent);
 						glUniform1i(LightCount, lights.size());
+						
+						//glBindSampler(0, DiffuseTex);						
 
 						// dla ka¿dego œwiat³a...
 						for(int l = 0; l < lights.size(); l++) {
@@ -97,6 +105,15 @@ namespace Swift {
 				
 						// u¿ywam programu dla aktualnie renderowanej czêœci
 
+						
+						glActiveTexture(GL_TEXTURE0); // GL_TEXTURE0 to 0. sampler
+
+						if(object->getPartAt(i).getMaterial()->DiffuseMap != SW_TEXTURE_EMPTY) {
+							Texture tex = *(object->getPartAt(i).getMaterial()->DiffuseMap);
+							glBindTexture(GL_TEXTURE_2D, tex.TexID);
+						}
+						glUniform1i(DiffuseTex, 0); // informujê shader, ¿e sampler jest pod 0
+
 						glEnableVertexAttribArray(0);
 
 						glBindBuffer(GL_ARRAY_BUFFER, object->getPartAt(i).getVBO());
@@ -121,10 +138,23 @@ namespace Swift {
 							(void*)0
 						);
 
+						glEnableVertexAttribArray(2);
+
+						glBindBuffer(GL_ARRAY_BUFFER, object->getPartAt(i).getUVbuffer());
+						glVertexAttribPointer(
+							2,
+							2,
+							GL_FLOAT,
+							GL_FALSE,
+							0,
+							(void*)0
+						);
+
 						glDrawArrays(GL_TRIANGLES, 0, object->getPartAt(i).getVertexCount());
 
 						glDisableVertexAttribArray(0);
 						glDisableVertexAttribArray(1);
+						glDisableVertexAttribArray(2);
 					}
 				}
 			}

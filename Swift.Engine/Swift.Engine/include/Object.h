@@ -25,6 +25,7 @@ namespace Swift {
 			void setMaterial(MaterialPtr _mtl);
 			void hide();
 			void show();
+			bool isVisible(void);
 
 			std::string getName();
 

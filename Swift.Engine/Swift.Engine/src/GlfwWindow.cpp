@@ -26,7 +26,7 @@ namespace Swift {
 		}
 		glfwOpenWindowHint(GLFW_FSAA_SAMPLES, samples);
 		glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 4);
-		glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
+		glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 0);
 		glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		if(!glfwOpenWindow( width, height, 0,0,0,0, 32, 0, mode)) {

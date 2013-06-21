@@ -4,7 +4,6 @@
 # XDimension Software, LLC
 # http://www.xdsoft.com/explorer/
 # 
-mtllib teapot.mtl
 # object Teapot01
 g Teapot01
 v 3.5 6 -2.62268e-07
@@ -9823,7 +9822,6 @@ vn 0.344373 0.937373 -0.0523356
 vn 0.66009 0.744632 -0.0990194
 vn 0.83451 0.528686 -0.155194
 # 3377 normals
-usemtl m1
 f 1/1/1 2/2/2 3/3/3
 f 3/3/3 4/4/4 1/1/1
 f 4/4/4 3/3/3 5/5/5

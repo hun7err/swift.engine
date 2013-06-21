@@ -42,9 +42,12 @@ namespace Swift {
 			std::vector<Material> materials;
 			std::map<std::string, GLuint> programs;
 		public:
+			int loadMtl(const char *filename);
 			int loadShaders(std::string shader_name);
 			unsigned int getProgram(std::string name);
-			Material& getMaterial(unsigned int key);
+			unsigned int getMaterialCount(void);
+			Material getMaterial(unsigned int key);
+			MaterialPtr getMaterialByName(std::string name);
 			MaterialPtr addMaterial(Material mtl);
 		MaterialManagerClass();
 		~MaterialManagerClass();

@@ -14,6 +14,7 @@ namespace Swift {
 	}
 
 	Texture TextureManagerClass::getTexture(unsigned int key) {
+		//printf("key = %d\n", key);
 		return textures[key];
 	}
 
@@ -22,7 +23,8 @@ namespace Swift {
 		return TexturePtr(textures.size()-1);
 	}
 
-	TextureManagerClass::TextureManagerClass() {}
+	TextureManagerClass::TextureManagerClass() {
+	}
 	TextureManagerClass::~TextureManagerClass() {
 		for(int i = 0; i < textures.size(); i++) {
 			textures[i].destroy();

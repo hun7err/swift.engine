@@ -49,17 +49,25 @@ namespace Swift {
 	}
 
 	void ObjectPart::reload() {
+		//printf("glGenBuffers(VBO)\n");
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
-		glGenBuffers(1, &uvbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_DYNAMIC_DRAW);
+		//printf("glGenBuffers(uvs), uvs.size() = %d\n", uvs.size());
+		if(!uvs.empty()) {
+			glGenBuffers(1, &uvbuffer);
+			glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+			glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
+		}
 
-		glGenBuffers(1, &normalbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_DYNAMIC_DRAW);
+		//printf("glGenBuffers(normals), normals.size() = %d\n", normals.size());
+		if(!normals.empty()) {
+			glGenBuffers(1, &normalbuffer);
+			glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+			glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+		}
+		//printf("gotowe!\n");
 	}
 
 	bool ObjectPart::isVisible() {

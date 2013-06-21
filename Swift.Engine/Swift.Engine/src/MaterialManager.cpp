@@ -1,4 +1,5 @@
 #include "../include/MaterialManager.h"
+#include "../include/TextureManager.h"
 #include <fstream>
 #include <vector>
 #include <GL/glew.h>
@@ -105,8 +106,122 @@ namespace Swift {
 		return MaterialPtr(materials.size()-1);
 	}
 
-	Material& MaterialManagerClass::getMaterial(unsigned int key) {
+	Material MaterialManagerClass::getMaterial(unsigned int key) {
 		return materials[key];
+	}
+
+	MaterialPtr MaterialManagerClass::getMaterialByName(std::string name) {
+		//printf("name = %s\n", name.c_str());
+		for(int key = 0; key < materials.size(); key++) {
+			//printf("available: %s\n", materials[key].name.c_str());
+			if(materials[key].name == name) {
+				//printf("Found!\n");
+				return MaterialPtr(key);
+			}
+		}
+		//printf("dammit, nothing ;_;\n");
+		return MaterialPtr(666666);
+	}
+
+	unsigned int MaterialManagerClass::getMaterialCount(void) {
+		return materials.size();
+	}
+
+	int MaterialManagerClass::loadMtl(const char *filename) {
+		//printf("loadMtl(%s)\n", filename);
+
+		std::ifstream in(filename);
+		if(!in.is_open()) return SW_FAILURE;
+		
+		Material *m = NULL;
+		std::string line, name;
+
+		int linec = 1;
+
+		while(std::getline(in, line)) {
+
+			std::string st = line.substr(0, line.find(' '));
+			std::string temp(line);
+			
+			float xyz[3];
+			int i = 0;
+
+			while(temp != "" && temp != " " && temp.find(' ') != std::string::npos) {
+
+				if(st == "Ka" || st == "Ks" || st == "Kd") {
+					xyz[i] = ::atof(temp.substr(0, temp.find(' ')).c_str());
+					i++;
+				}
+				temp = temp.substr(temp.find(' ')+1, temp.length()-temp.find(' ')-1);
+			}
+			
+			glm::vec3 col(xyz[0], xyz[1], xyz[2]);
+			std::string arg = line.substr(line.find(' ')+1, line.length()-line.find(' ')-1);
+			if(st == "newmtl") { // nie ustawia nazw, wtf
+				//printf("newmtl\n");
+				if(m != NULL) {
+					//printf("addMaterial\n");
+					m->name = name;
+					//if(m->PhongExponent < 0 || m->PhongExponent > 1000) m->PhongExponent = 50;
+					addMaterial(*m);
+					//printf("delete m\n");
+					delete m;
+				}
+				m = new Material("phongblinn");
+				m->PhongExponent = 50;
+				m->DiffuseMap = SW_TEXTURE_EMPTY;
+				m->AmbientMap = SW_TEXTURE_EMPTY;
+				m->SpecularMap = SW_TEXTURE_EMPTY;
+
+				name = arg;
+			} else if (st == "Ns") {
+				float phong = ::atof(arg.c_str());
+				m->PhongExponent = phong;
+				//printf("Phong exponent: %f\n", m->PhongExponent);
+			} else if (st == "Ka") {
+				m->AmbientColor = col;
+				//printf("Ambient color: %f %f %f\n", m->AmbientColor.r, m->AmbientColor.g, m->AmbientColor.b);
+			} else if (st == "Ks") {
+				m->SpecularColor = col;
+				//printf("Specular color: %f %f %f\n", m->SpecularColor.r, m->SpecularColor.g, m->SpecularColor.b);
+			} else if (st == "Kd") {
+				m->DiffuseColor = col;
+				//printf("Diffuse color: %f %f %f\n", m->DiffuseColor.r, m->DiffuseColor.g, m->DiffuseColor.b);
+			} else if (st == "map_Kd") {
+				const char *tex_name = arg.c_str();
+
+				Texture tex(tex_name);
+
+				//printf("Adding diffuse texture\n");
+				m->DiffuseMap = TextureManager->addTexture(tex);
+				//printf("diffuse tex - done!\n");
+			} else if (st == "map_Ka") {
+				const char *tex_name = arg.c_str();
+
+				Texture tex(tex_name);
+
+				m->AmbientMap = TextureManager->addTexture(tex);
+			} else if (st == "map_Ks") {
+				const char *tex_name = arg.c_str();
+				Texture tex(tex_name);
+
+				m->SpecularMap = TextureManager->addTexture(tex);
+			} else if (st == "map_bump" || st == "bump") {
+				const char *tex_name = arg.c_str();
+
+				Texture tex(tex_name);
+
+				m->SpecularMap = TextureManager->addTexture(tex);
+			}
+			linec++;
+		}
+		
+		m->name = name;
+		addMaterial(*m);
+		delete m;
+		
+		//printf("success!\n");
+		return SW_SUCCESS;
 	}
 
 	MaterialManagerClass::MaterialManagerClass() {}
